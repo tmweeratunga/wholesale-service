@@ -26,7 +26,7 @@ curl -X 'GET' \
 curl -X 'GET' \
   'http://localhost:8080/user/accounts/0001/transactions?pageNumber=0&pageSize=2' \
   -H 'accept: application/json' \
-  -H 'authorization: B 123456'
+  -H 'authorization: Bearer 123456'
 ````
 
 #### Database Details
