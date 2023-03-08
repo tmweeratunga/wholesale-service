@@ -20,10 +20,12 @@ public class AccountControllerSupport {
         HttpHeaders headers = new HttpHeaders();
         platformResponse.add(linkTo(methodOn(AccountController.class).getUserTransactionList(headers, accountId, pageNumber, pageSize)).withSelfRel());
         platformResponse.add(linkTo(methodOn(AccountController.class).getUserAccountList(headers)).withRel("getUserAccountList"));
-        if(data.getTotalPages() - 1 != pageNumber)
-            platformResponse.add(linkTo(methodOn(AccountController.class).getUserTransactionList(headers, accountId, pageNumber + 1, pageSize)).withRel("nextPage"));
-        if(pageNumber > 0)
-            platformResponse.add(linkTo(methodOn(AccountController.class).getUserTransactionList(headers, accountId, pageNumber -1, pageSize)).withRel("backPage"));
+        if(data != null && !data.getTransactionDetails().isEmpty()) {
+            if (data.getTotalPages() - 1 != pageNumber)
+                platformResponse.add(linkTo(methodOn(AccountController.class).getUserTransactionList(headers, accountId, pageNumber + 1, pageSize)).withRel("nextPage"));
+            if (pageNumber > 0)
+                platformResponse.add(linkTo(methodOn(AccountController.class).getUserTransactionList(headers, accountId, pageNumber - 1, pageSize)).withRel("backPage"));
+        }
     }
 
     public void addAccountResponseHateoasSupport(AccountResponse accountResponse) throws AccessDeniedException {
