@@ -15,7 +15,6 @@ public class SwaggerConfiguration {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Wholesale Engineering Sample Project").version("1.0.0"))
-                // Components section defines Security Scheme "mySecretHeader"
                 .components(new Components()
                         .addSecuritySchemes("authorization", new SecurityScheme()
                                 .type(SecurityScheme.Type.APIKEY)
