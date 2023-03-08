@@ -11,6 +11,24 @@ This sample backend application will expose two GET APIs
 ````
 Eg : authorization: Bearer 123456
 ````
+
+#### Curl commands
+- get accounts
+````
+curl -X 'GET' \
+  'http://localhost:8080/user/accounts' \
+  -H 'accept: application/json' \
+  -H 'authorization: Bearer 123456'
+````
+
+- get transactions
+````
+curl -X 'GET' \
+  'http://localhost:8080/user/accounts/0001/transactions?pageNumber=0&pageSize=2' \
+  -H 'accept: application/json' \
+  -H 'authorization: B 123456'
+````
+
 #### Database Details
 - H2 embedded database use in this application
 - In dev and test application profiles H2 console will be enabled : http://localhost:8080/h2/login.jsp
