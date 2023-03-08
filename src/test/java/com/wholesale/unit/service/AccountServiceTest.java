@@ -58,7 +58,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    void getAccountListByUserIdSuccessWithMultipleData() {
+    void getAccountListByUserIdSuccessWithEmptyDataList() {
         when(accountRepository.findByUserId(anyString())).thenReturn(new ArrayList<>());
         List<AccountResponse> accountResponseList = accountService.getAccountListByUserId(anyString());
         verify(accountRepository, times(1)).findByUserId(any());
@@ -67,7 +67,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    void getAccountListByUserIdSuccessWithEmptyDataList() {
+    void getAccountListByUserIdSuccessWithMultipleData() {
         when(accountRepository.findByUserId(anyString())).thenReturn(List.of(
                 getAccount("ACCOUNTID_1")
                 , getAccount("ACCOUNTID_2")));
@@ -75,14 +75,6 @@ public class AccountServiceTest {
         verify(accountRepository, times(1)).findByUserId(any());
         assertFalse(accountResponseList.isEmpty());
         assertEquals(2, accountResponseList.size());
-    }
-
-    @Test
-    void getAccountListByUserIdSuccessWithEmptyData() {
-        when(accountRepository.findByUserId(anyString())).thenReturn(new ArrayList<>());
-        List<AccountResponse> accountResponseList = accountService.getAccountListByUserId(anyString());
-        verify(accountRepository, times(1)).findByUserId(any());
-        assertTrue(accountResponseList.isEmpty());
     }
 
     private Account getAccount(String accountId) {

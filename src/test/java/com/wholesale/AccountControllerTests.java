@@ -43,7 +43,7 @@ class AccountControllerTests {
             "Bearer 123456,2",
             "Bearer 1234567,0"
     })
-    void testGetUserAccountList_Success(String token, int numOfRecords){
+    void testGetUserAccountListSuccess(String token, int numOfRecords){
         String url = BASE_URL+localPort + "/user/accounts";
         HttpHeaders headers = new HttpHeaders();
         headers.add("authorization",token);
@@ -60,7 +60,7 @@ class AccountControllerTests {
     }
 
     @Test
-    void testGetUserAccountListWithoutAuthentication_Failed(){
+    void testGetUserAccountListWithoutAuthenticationFailed(){
         String url = BASE_URL + localPort + "/user/accounts";
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<PlatformResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(headers), PlatformResponse.class);
@@ -72,7 +72,7 @@ class AccountControllerTests {
             "Bearer 123456,2",
             "Bearer 1234567,0"
     })
-    void testGetUserTransactionList_Success(String token, int numOfRecords){
+    void testGetUserTransactionListSuccess(String token, int numOfRecords){
         String url = BASE_URL+localPort + "/user/accounts/0001/transactions?pageNumber=0&pageSize=2";
         HttpHeaders headers = new HttpHeaders();
         headers.add("authorization",token);
@@ -93,7 +93,7 @@ class AccountControllerTests {
     }
 
     @Test
-    void testGetUserTransactionListWithoutAuthentication_Failed(){
+    void testGetUserTransactionListWithoutAuthenticationFailed(){
         String url = BASE_URL+localPort + "/user/accounts/0001/transactions?pageNumber=0&pageSize=2";
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<PlatformResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(headers), PlatformResponse.class);
@@ -101,7 +101,7 @@ class AccountControllerTests {
     }
 
     @Test
-    void testGetUserTransactionListBadPageNumber_Failed(){
+    void testGetUserTransactionListBadPageNumberFailed(){
         String url = BASE_URL+localPort + "/user/accounts/0001/transactions?pageNumber=-1&pageSize=2";
         HttpHeaders headers = new HttpHeaders();
         headers.add("authorization","Bearer 123456");
@@ -110,7 +110,7 @@ class AccountControllerTests {
     }
 
     @Test
-    void testGetUserTransactionListBadPageSize_Failed(){
+    void testGetUserTransactionListBadPageSizeFailed(){
         String url = BASE_URL+localPort + "/user/accounts/0001/transactions?pageNumber=1&pageSize=-2";
         HttpHeaders headers = new HttpHeaders();
         headers.add("authorization","Bearer 123456");
