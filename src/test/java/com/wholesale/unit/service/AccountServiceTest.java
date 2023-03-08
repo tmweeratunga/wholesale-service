@@ -22,7 +22,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class AccountServiceTest {
@@ -37,34 +40,54 @@ public class AccountServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    void getAccountListByUserIdSuccessWithData(){
-        when(accountRepository.findByUserId(anyString())).thenReturn(getAccountList());
+    void getAccountListByUserIdSuccessWithData() {
+        Account account = getAccount("ACCOUNTID");
+        when(accountRepository.findByUserId(anyString())).thenReturn(List.of(account));
         List<AccountResponse> accountResponseList = accountService.getAccountListByUserId(anyString());
-        verify(accountRepository,times(1)).findByUserId(any());
+        verify(accountRepository, times(1)).findByUserId(any());
         assertFalse(accountResponseList.isEmpty());
         assertTrue(accountResponseList.size() == 1);
-        assertEquals(accountResponseList.get(0).getAccountId(),"ACCOUNTID");
-        assertEquals(accountResponseList.get(0).getAccountName(),"NAME");
-        assertEquals(accountResponseList.get(0).getAccountType(),"Savings");
-        assertEquals(accountResponseList.get(0).getAccountNumber(),"123456");
-        assertEquals(accountResponseList.get(0).getBalanceDate(),new Date(1678169817163L));
-        assertEquals(accountResponseList.get(0).getOpeningBalance(),BigDecimal.valueOf(123.50));
-        assertEquals(accountResponseList.get(0).getCurrency(),"AUD");
+        assertEquals(accountResponseList.get(0).getAccountId(), account.getAccountId());
+        assertEquals(accountResponseList.get(0).getAccountName(), account.getAccountName());
+        assertEquals(accountResponseList.get(0).getAccountType(), account.getAccountType().getType());
+        assertEquals(accountResponseList.get(0).getAccountNumber(), account.getAccountNumber());
+        assertEquals(accountResponseList.get(0).getBalanceDate(), account.getBalanceDate());
+        assertEquals(accountResponseList.get(0).getOpeningBalance(), account.getOpeningBalance());
+        assertEquals(accountResponseList.get(0).getCurrency(), account.getCurrency().getCurrencyCode());
 
     }
 
     @Test
-    void getAccountListByUserIdSuccessWithEmptyData(){
+    void getAccountListByUserIdSuccessWithMultipleData() {
         when(accountRepository.findByUserId(anyString())).thenReturn(new ArrayList<>());
         List<AccountResponse> accountResponseList = accountService.getAccountListByUserId(anyString());
-        verify(accountRepository,times(1)).findByUserId(any());
+        verify(accountRepository, times(1)).findByUserId(any());
+        assertTrue(accountResponseList.isEmpty());
+        assertEquals(0, accountResponseList.size());
+    }
+
+    @Test
+    void getAccountListByUserIdSuccessWithEmptyDataList() {
+        when(accountRepository.findByUserId(anyString())).thenReturn(List.of(
+                getAccount("ACCOUNTID_1")
+                , getAccount("ACCOUNTID_2")));
+        List<AccountResponse> accountResponseList = accountService.getAccountListByUserId(anyString());
+        verify(accountRepository, times(1)).findByUserId(any());
+        assertFalse(accountResponseList.isEmpty());
+        assertEquals(2, accountResponseList.size());
+    }
+
+    @Test
+    void getAccountListByUserIdSuccessWithEmptyData() {
+        when(accountRepository.findByUserId(anyString())).thenReturn(new ArrayList<>());
+        List<AccountResponse> accountResponseList = accountService.getAccountListByUserId(anyString());
+        verify(accountRepository, times(1)).findByUserId(any());
         assertTrue(accountResponseList.isEmpty());
     }
 
-    private List<Account> getAccountList(){
-        List<Account> accountList = new ArrayList<>();
-        accountList.add(Account.builder()
-                .accountId("ACCOUNTID")
+    private Account getAccount(String accountId) {
+        return Account.builder()
+                .accountId(accountId)
                 .accountName("NAME")
                 .accountType(AccountType.builder().id(1L).type("Savings").description("description").build())
                 .accountNumber("123456")
@@ -72,7 +95,6 @@ public class AccountServiceTest {
                 .openingBalance(BigDecimal.valueOf(123.50))
                 .currency(Currency.builder().id(1L).currencyCode("AUD").name("Australian Dollar").build())
                 .userId("USERID")
-                .build());
-        return accountList;
+                .build();
     }
 }

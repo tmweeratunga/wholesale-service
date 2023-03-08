@@ -19,7 +19,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @SpringBootTest (classes = WholesaleCodeTestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AccountControllerTests {
